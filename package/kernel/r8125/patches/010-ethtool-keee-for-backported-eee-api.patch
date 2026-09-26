@@ -1,0 +1,58 @@
+--- a/src/r8125_n.c
++++ b/src/r8125_n.c
+@@ -7259,7 +7259,7 @@
+         return to_us;
+ }
+ 
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,9,0)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
+ static void
+ rtl8125_adv_to_linkmode(unsigned long *mode, u64 adv)
+ {
+@@ -7525,7 +7525,7 @@
+ 
+         return rc;
+ }
+-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(6,9,0) */
++#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0) */
+ #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,0)
+@@ -15356,7 +15356,7 @@
+                 struct ethtool_keee *eee = &tp->eee;
+ 
+                 eee->eee_enabled = eee_enable;
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(6,9,0)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6,6,0)
+                 eee->supported  = SUPPORTED_100baseT_Full |
+                                   SUPPORTED_1000baseT_Full;
+                 eee->advertised = mmd_eee_adv_to_ethtool_adv_t(MDIO_EEE_1000T | MDIO_EEE_100TX);
+@@ -15389,7 +15389,7 @@
+                         }
+                         break;
+                 }
+-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(6,9,0) */
++#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(6,6,0) */
+                 eee->tx_lpi_enabled = eee_enable;
+                 eee->tx_lpi_timer = dev->mtu + ETH_HLEN + 0x20;
+         }
+--- a/src/r8125.h
++++ b/src/r8125.h
+@@ -488,7 +488,7 @@
+ #define  MDIO_EEE_2_5GT  0x0001
+ #endif
+ 
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(6,9,0)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6,6,0)
+ #define ethtool_keee ethtool_eee
+ #define rtl8125_ethtool_adv_to_mmd_eee_adv_cap1_t ethtool_adv_to_mmd_eee_adv_t
+ static inline u32 rtl8125_ethtool_adv_to_mmd_eee_adv_cap2_t(u32 adv)
+@@ -503,7 +503,7 @@
+ #else
+ #define rtl8125_ethtool_adv_to_mmd_eee_adv_cap1_t linkmode_to_mii_eee_cap1_t
+ #define rtl8125_ethtool_adv_to_mmd_eee_adv_cap2_t linkmode_to_mii_eee_cap2_t
+-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(6,9,0) */
++#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(6,6,0) */
+ 
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
+ #ifdef CONFIG_NET_POLL_CONTROLLER

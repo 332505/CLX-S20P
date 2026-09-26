@@ -1,0 +1,52 @@
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -1888,7 +1888,8 @@
+ 	 * in this switch shall be regarded as broken.
+ 	 */
+ 	if (phydev->dev_flags & MICREL_NO_EEE)
+-		phydev->eee_broken_modes = -1;
++		bitmap_fill(phydev->eee_broken_modes,
++			    __ETHTOOL_LINK_MODE_MASK_NBITS);
+ 
+ 	return kszphy_config_init(phydev);
+ }
+--- a/drivers/net/ethernet/realtek/r8169_main.c
++++ b/drivers/net/ethernet/realtek/r8169_main.c
+@@ -5267,8 +5267,10 @@
+ 
+ 	/* mimic behavior of r8125/r8126 vendor drivers */
+ 	if (tp->mac_version == RTL_GIGA_MAC_VER_61)
+-		tp->phydev->eee_broken_modes |= MDIO_EEE_2_5GT;
+-	tp->phydev->eee_broken_modes |= MDIO_EEE_5GT;
++		linkmode_set_bit(ETHTOOL_LINK_MODE_2500baseT_Full_BIT,
++				 tp->phydev->eee_broken_modes);
++	linkmode_set_bit(ETHTOOL_LINK_MODE_5000baseT_Full_BIT,
++			 tp->phydev->eee_broken_modes);
+ 
+ 	/* PHY will be woken up in rtl_open() */
+ 	phy_suspend(tp->phydev);
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -1856,8 +1856,8 @@
+ 	ret = lan78xx_read_reg(dev, MAC_CR, &buf);
+ 	if (buf & MAC_CR_EEE_EN_) {
+ 		edata->eee_enabled = true;
+-		edata->eee_active = !!(edata->advertised &
+-				       edata->lp_advertised);
++		edata->eee_active = linkmode_intersects(edata->advertised,
++							edata->lp_advertised);
+ 		edata->tx_lpi_enabled = true;
+ 		/* EEE_TX_LPI_REQ_DLY & tx_lpi_timer are same uSec unit */
+ 		ret = lan78xx_read_reg(dev, EEE_TX_LPI_REQ_DLY, &buf);
+--- a/drivers/net/ethernet/microchip/lan743x_ethtool.c
++++ b/drivers/net/ethernet/microchip/lan743x_ethtool.c
+@@ -1088,7 +1088,8 @@
+ 	buf = lan743x_csr_read(adapter, MAC_CR);
+ 	if (buf & MAC_CR_EEE_EN_) {
+ 		eee->eee_enabled = true;
+-		eee->eee_active = !!(eee->advertised & eee->lp_advertised);
++		eee->eee_active = linkmode_intersects(eee->advertised,
++						      eee->lp_advertised);
+ 		eee->tx_lpi_enabled = true;
+ 		/* EEE_TX_LPI_REQ_DLY & tx_lpi_timer are same uSec unit */
+ 		buf = lan743x_csr_read(adapter, MAC_EEE_TX_LPI_REQ_DLY_CNT);
