@@ -1,0 +1,55 @@
+--- a/src/r8168.h
++++ b/src/r8168.h
+@@ -423,12 +423,12 @@
+ #define  MDIO_EEE_1000T  0x0004
+ #endif
+ 
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(6,9,0)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6,6,0)
+ #define ethtool_keee ethtool_eee
+ #define rtl8168_ethtool_adv_to_mmd_eee_adv_cap1_t ethtool_adv_to_mmd_eee_adv_t
+ #else
+ #define rtl8168_ethtool_adv_to_mmd_eee_adv_cap1_t linkmode_to_mii_eee_cap1_t
+-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(6,9,0) */
++#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(6,6,0) */
+ 
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
+ #ifdef CONFIG_NET_POLL_CONTROLLER
+--- a/src/r8168_n.c
++++ b/src/r8168_n.c
+@@ -8022,7 +8022,7 @@
+         return to_us;
+ }
+ 
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,9,0)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
+ static void
+ rtl8168_adv_to_linkmode(unsigned long *mode, u64 adv)
+ {
+@@ -8245,7 +8245,7 @@
+ out:
+         return rc;
+ }
+-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(6,9,0) */
++#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0) */
+ #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,0)
+@@ -26894,7 +26894,7 @@
+                 struct ethtool_keee *eee = &tp->eee;
+ 
+                 eee->eee_enabled = eee_enable;
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(6,9,0)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6,6,0)
+                 eee->supported  = SUPPORTED_100baseT_Full |
+                                   SUPPORTED_1000baseT_Full;
+                 eee->advertised = mmd_eee_adv_to_ethtool_adv_t(MDIO_EEE_1000T | MDIO_EEE_100TX);
+@@ -26903,7 +26903,7 @@
+                 linkmode_set_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT, eee->supported);
+                 linkmode_set_bit(ETHTOOL_LINK_MODE_100baseT_Full_BIT, eee->advertised);
+                 linkmode_set_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT, eee->advertised);
+-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(6,9,0) */
++#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(6,6,0) */
+                 eee->tx_lpi_enabled = eee_enable;
+                 eee->tx_lpi_timer = dev->mtu + ETH_HLEN + 0x20;
+         }

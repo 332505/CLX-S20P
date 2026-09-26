@@ -1,0 +1,40 @@
+--- a/r8152.c
++++ b/r8152.c
+@@ -27178,7 +27178,7 @@
+ }
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,9,0)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
+ static int r8152_get_eee(struct r8152 *tp, struct ethtool_keee *eee)
+ {
+ 	__ETHTOOL_DECLARE_LINK_MODE_MASK(common);
+@@ -27370,7 +27370,7 @@
+ {
+ 	return r8152_set_eee(tp, eee);
+ }
+-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(6,9,0) */
++#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0) */
+ 
+ static int
+ rtl_ethtool_get_eee(struct net_device *net, struct ethtool_keee *edata)
+--- a/compatibility.h
++++ b/compatibility.h
+@@ -21,7 +21,7 @@
+ #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0) */
+ #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31) */
+ 
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(6,9,0)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6,6,0)
+ 	#define ethtool_keee ethtool_eee
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(5,19,0)
+ 	#define TSO_LEGACY_MAX_SIZE		65536
+@@ -639,7 +639,7 @@
+ 	}
+ #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,17,0) */
+ #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,19,0) */
+-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(6,9,0) */
++#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(6,6,0) */
+ 
+ #ifndef FALSE
+ 	#define TRUE	1
